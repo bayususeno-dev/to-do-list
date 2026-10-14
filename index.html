@@ -3,7 +3,274 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>to do list</title>
+    <link rel="stylesheet" href="/styles/main.css" />
+    <script src="/scripts/script.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <header class="site-header">
+      <div class="page-container header-layout">
+        <div class="app-brand">
+          <h1>To-Do List</h1>
+          <p>Organize your work. Stay on track.</p>
+        </div>
+
+        <section class="date-time-card" aria-label="Current date and time">
+          <p class="card-label">TODAY</p>
+
+          <time id="current-date"></time>
+
+          <p class="clock-label">Current time :</p>
+
+          <time id="live-clock" aria-label="Current time"></time>
+        </section>
+      </div>
+    </header>
+
+    <main id="main-content" class="page-container">
+      <!-- Profile and task creation -->
+      <div class="top-grid">
+        <!-- Profile -->
+        <section class="panel profile-panel" aria-labelledby="profile-heading">
+          <div class="section-heading">
+            <p class="eyebrow">YOUR INFORMATION</p>
+            <h2 id="profile-heading">Profile</h2>
+          </div>
+
+          <div id="profile-summary" class="profile-summary" aria-live="polite">
+            <h3 id="profile-display-name">Profile not set</h3>
+            <p id="profile-display-division">
+              Add your name and division or position.
+            </p>
+          </div>
+
+          <details id="profile-settings" open>
+            <summary>Set up / edit profile</summary>
+
+            <form id="profile-form">
+              <div class="form-group">
+                <label for="profile-name">Full Name</label>
+                <input
+                  type="text"
+                  id="profile-name"
+                  name="profileName"
+                  placeholder="Enter your name"
+                  autocomplete="name"
+                  maxlength="80"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="profile-division"> Division / Position </label>
+                <input
+                  type="text"
+                  id="profile-division"
+                  name="profileDivision"
+                  placeholder="e.g. Software Engineer"
+                  maxlength="100"
+                  required
+                />
+              </div>
+
+              <button type="submit" id="save-profile-button" class="button">
+                Save Profile
+              </button>
+
+              <p
+                id="profile-message"
+                class="form-message"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </form>
+          </details>
+        </section>
+
+        <!-- Add Task -->
+        <section
+          class="panel task-form-panel"
+          aria-labelledby="task-form-heading"
+        >
+          <div class="section-heading">
+            <p class="eyebrow">PLAN YOUR WORK</p>
+            <h2 id="task-form-heading">Add New Task</h2>
+          </div>
+
+          <form id="task-form">
+            <div class="form-group">
+              <label for="task-title">Task Description</label>
+
+              <textarea
+                id="task-title"
+                name="taskTitle"
+                placeholder="What do you need to do?"
+                rows="3"
+                maxlength="300"
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="task-priority">Priority</label>
+
+                <select id="task-priority" name="taskPriority" required>
+                  <option value="" selected disabled>Select priority</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="task-deadline">Deadline</label>
+
+                <input
+                  type="date"
+                  id="task-deadline"
+                  name="taskDeadline"
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="add-task-button"
+              class="button button-primary"
+            >
+              Add Task
+            </button>
+
+            <p
+              id="task-form-message"
+              class="form-message"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+        </section>
+      </div>
+
+      <!-- Task board -->
+      <section class="task-board" aria-labelledby="tasks-heading">
+        <div class="task-board-header">
+          <div>
+            <p class="eyebrow">YOUR WORKLOAD</p>
+            <h2 id="tasks-heading">My Tasks</h2>
+            <p>Keep track of what's next and what's completed.</p>
+          </div>
+
+          <button
+            type="button"
+            id="delete-all-button"
+            class="button button-danger"
+          >
+            Delete All Tasks
+          </button>
+        </div>
+
+        <div class="task-columns">
+          <!-- Ongoing tasks -->
+          <section class="task-column" aria-labelledby="todo-heading">
+            <div class="column-heading">
+              <h3 id="todo-heading">To Do</h3>
+              <span id="todo-count" class="task-count">0</span>
+            </div>
+
+            <!-- The next task in the sorted list -->
+            <section class="next-up-card" aria-labelledby="next-up-heading">
+              <p class="eyebrow">FOCUS ON THIS</p>
+              <h3 id="next-up-heading">Next Up</h3>
+
+              <p id="next-up-task">No tasks yet. Add your first task above.</p>
+            </section>
+
+            <p id="todo-empty-state" class="empty-state">
+              No ongoing tasks. You're all caught up!
+            </p>
+
+            <!-- JavaScript will insert task items here -->
+            <ul
+              id="todo-list"
+              class="task-list"
+              aria-label="Ongoing tasks"
+            ></ul>
+          </section>
+
+          <!-- Completed tasks -->
+          <section class="task-column" aria-labelledby="done-heading">
+            <div class="column-heading">
+              <h2 id="done-heading">Done</h2>
+              <span id="done-count" class="task-count">0</span>
+            </div>
+
+            <p id="done-empty-state" class="empty-state">
+              Completed tasks will appear here.
+            </p>
+
+            <!-- JavaScript will insert completed tasks here -->
+            <ul
+              id="done-list"
+              class="task-list"
+              aria-label="Completed tasks"
+            ></ul>
+          </section>
+        </div>
+
+        <p
+          id="task-board-message"
+          class="form-message"
+          role="status"
+          aria-live="polite"
+        ></p>
+      </section>
+    </main>
+    <!--
+        Template for one task.
+        JavaScript will clone this template whenever a task is created.
+    -->
+    <template id="task-template">
+      <li class="task-item">
+        <div class="task-card">
+          <label class="task-checkbox-label">
+            <input type="checkbox" class="task-checkbox" />
+            <span class="visually-hidden"> Mark task as complete </span>
+          </label>
+
+          <div class="task-content">
+            <div class="task-title-row">
+              <h3 class="task-item-title"></h3>
+
+              <span class="task-overdue-badge" hidden></span>
+            </div>
+
+            <div class="task-details">
+              <span class="task-priority"></span>
+
+              <span aria-hidden="true">·</span>
+
+              <span>
+                Due:
+                <time class="task-deadline-date"></time>
+              </span>
+            </div>
+
+            <p class="task-created">
+              Added:
+              <time class="task-created-date"></time>
+            </p>
+
+            <p class="task-completed" hidden>
+              Completed:
+              <time class="task-completed-date"></time>
+            </p>
+          </div>
+
+          <button type="button" class="task-delete-button">Delete</button>
+        </div>
+      </li>
+    </template>
+  </body>
 </html>
