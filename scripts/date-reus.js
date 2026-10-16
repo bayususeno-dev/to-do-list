@@ -74,3 +74,35 @@ export function formatTimestamp(timestamp) {
 
   return fullDateFormatter.format(date);
 }
+
+/* ========================================
+  LOCAL STORAGE
+======================================== */
+
+export function readStorage(key, fallbackValue) {
+  try {
+    const savedValue = localStorage.getItem(key);
+
+    if (savedValue === null) {
+      return fallbackValue;
+    }
+
+    return JSON.parse(savedValue);
+  } catch (error) {
+    console.error(`Could not read ${key} from localStorage:`, error);
+
+    return fallbackValue;
+  }
+}
+
+export function saveStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+
+    return true;
+  } catch (error) {
+    console.error(`Could not save ${key} to localStorage:`, error);
+
+    return false;
+  }
+}
