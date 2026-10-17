@@ -511,6 +511,36 @@ function deleteTask(taskId) {
 }
 
 /* ========================================
+   10. DELETE ALL TASKS
+======================================== */
+
+document.getElementById("delete-all-button").addEventListener("click", () => {
+  if (tasks.length === 0) {
+    return;
+  }
+
+  const confirmed = window.confirm(
+    "Are you sure you want to delete all tasks? This action cannot be undone.",
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  tasks = [];
+
+  const savedSuccessfully = persistTasks();
+
+  renderTasks();
+
+  const taskBoardMessage = document.getElementById("task-board-message");
+
+  taskBoardMessage.textContent = savedSuccessfully
+    ? "All tasks have been deleted."
+    : "Tasks cleared for this session, but the change could not be saved.";
+});
+
+/* ========================================
    INITIALIZE APPLICATION
 ======================================== */
 renderProfile();
