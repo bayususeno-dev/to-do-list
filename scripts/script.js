@@ -451,7 +451,7 @@ function toggleTask(taskId, isCompleted) {
 }
 
 /* ========================================
-   7. TASK STATUS & SORTING
+   8. TASK STATUS & SORTING
 ======================================== */
 
 function isOverdue(task, today = getLocalDateString()) {
@@ -484,6 +484,30 @@ function sortTodoTasks(taskA, taskB) {
 
   // Final tie-breaker: older task first.
   return taskA.createdAt - taskB.createdAt;
+}
+
+/* ========================================
+   9. DELETE ONE TASK
+======================================== */
+
+function deleteTask(taskId) {
+  const task = tasks.find((item) => item.id === taskId);
+
+  if (!task) {
+    return;
+  }
+
+  tasks = tasks.filter((item) => item.id !== taskId);
+
+  const savedSuccessfully = persistTasks();
+
+  renderTasks();
+
+  const taskBoardMessage = document.getElementById("task-board-message");
+
+  taskBoardMessage.textContent = savedSuccessfully
+    ? `"${task.title}" deleted.`
+    : "Task deleted for this session, but the change could not be saved.";
 }
 
 /* ========================================
